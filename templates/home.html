@@ -1,0 +1,224 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+  <!-- Bootstrap CSS -->
+
+  <!-- <link rel="shortcut icon"  type="image/x-icon" href="favicon.ico"> -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}">
+  <link rel="shortcut icon" href="{% static './images/icons8-edit-64.png' %}" type="image/png">
+  <script href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/conflict-detection.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+  {% if title %}
+  <title>ArtOfCoding-{{title}}</title>
+  {% else %}
+  <title>ArtOfCoding</title>
+  {% endif %}
+  
+</head>
+
+<body>
+
+  {% for message in messages %}
+  <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert" style="z-index: 5000;">
+    <strong>Note:</strong> {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+
+  <div class="preloader" id="preloader">
+    <h1 class="preloader">LOADING....</h1>
+  </div>
+
+
+  <div class="navigation">
+    <nav id="navbar">
+      <div class="humb">
+        <button class="bars" id="humberg" onclick="myfun()">
+          <i class="fas fa-bars"></i>
+        </button></div>
+      <div class="logo">
+        ArtOfCoding
+      </div>
+      <div class="menus">
+        <ul id="menus">
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'blog' %}">Blogs</a></li>
+          <li><a href="{% url 'contact' %}">ContactUs</a></li>
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'add' %}">AddPost</a></li>
+          <li><a href="{% url 'logout' %}">Logout</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="search">
+        <form action="{%url 'search' %}" method="POST" autocomplete="off"> {% csrf_token %}
+          <input type="search" name="query" id="query" placeholder="Search">
+          <button type="submit" class="src-btn"><i class="fas fa-search"></i></button>
+        </form>
+      </div>
+    </nav>
+  </div>
+
+
+
+
+  {% block body %}
+
+  {% if user.is_authenticated %}
+  <header style="flex-direction: column;">
+    <div class="heading">
+      <h1>Search For Your Blogs.</h1>
+    </div>
+    <div class="blog-search">
+      <form action="{%url 'search' %}" method="POST" autocomplete="off"> {% csrf_token %}
+      <input type="search" name="query" style="width: 100%;" placeholder="Search"><br>
+      <button type="submit" style="height: 55px;">Search</button>
+    </form>
+    </div>
+  </header>
+  {% else %}
+
+  <header>
+    <div class="content">
+      <div class="box">
+        <div class="btns">
+          <button type="submit" class="header-btn" onclick="register()" id="r">REGISTER</button>
+          <button type="submit" class="header-btn" onclick="login()" id="l">LOGIN</button></div>
+        <div class="register-form">
+          <h1>Register For Free</h1>
+          <form action="{%url 'home' %}" method="POST" autocomplete="off"> {% csrf_token %}
+            {{form|crispy}}
+            <button type="submit" class="login-btn">Register</button>
+          </form>
+
+        </div>
+        <div class="login-form">
+          <form action="{% url 'login' %}" method="POST"> {% csrf_token %}
+            <h1>Login</h1>
+            <div><input type="text" name="login-email" id='login-email' placeholder="Username"></div>
+            <!-- <div><input type="email" name="login-email" id='login-email' placeholder="Email"></div> -->
+            <div><input type="password" name="login-pswd" id='login-pswd' placeholder="Password"></div>
+            <div><a href="">Forget Password?</a></div>
+            <button type="submit" class="login-btn" style="margin-top: 10px;">Login</button>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </header>{% endif %}
+
+
+
+  <!-- <div class="trending">
+
+  </div> -->
+  <div class="about">
+    <h1>About Us</h1>
+    <div class="img">
+      <img src="https://www.pngitem.com/pimgs/m/78-786293_1240-x-1240-0-avatar-profile-icon-png.png">
+    </div>
+    <div class="txt">
+      <div class="text">
+        <p>Blog creators, also known as “bloggers,” come from all walks of life and backgrounds from around the world. As long as a person has access to online tools that help them to create web page content, they can make a blog and promote it to attract readers. </p>
+        <p>“Don’t Settle: Don’t finish crappy books. If you don’t like the menu, leave the restaurant. If you’re not on the right path get off it.”</p>
+      </div>
+      <div class="subs">
+        <h1>Subscribe our NewsLetter</h1>
+        <form action="{% url 'subscribe' %}" method="POST"> {% csrf_token %}
+        <input type="Email" name="subscribe" placeholder="Enter Your Email">
+        <button type="submit">Subscribe</button>
+      </form>
+      </div>
+
+    </div>
+  </div>
+  {% endblock %}
+  {% block footer %}
+  <footer>
+
+    <p>&copy;Designed By Roshan</p>
+
+
+  </footer>
+  {% endblock footer %}
+  
+
+
+
+  <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+  <!-- <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script> -->
+  
+  <script>
+$(window).load(function () {
+  $('div.preloader').remove();
+  
+})
+    // function pre() {
+    //   var pre = document.querySelector('.preloader');
+    //   pre.style.display = 'none';
+    // }
+
+    function myfun() {
+      var menu = document.getElementById("menus");
+      if (menu.style.display === "none") {
+        menu.style.display = 'block';
+      } else {
+        menu.style.display = 'none';
+      }
+
+    }
+    function login() {
+      var login = document.querySelector(".login-form");
+      var register = document.querySelector(".register-form");
+      var l = document.getElementById('l');
+      var r = document.getElementById('r');
+      login.style.display = "flex";
+      register.style.display = "none";
+      l.style.background = "skyblue";
+      r.style.background = 'white';
+
+    }
+    function register() {
+      var login = document.querySelector(".login-form");
+      var register = document.querySelector(".register-form");
+      var r = document.getElementById('r');
+      var l = document.getElementById('l');
+      register.style.display = 'block';
+      login.style.display = 'none';
+      r.style.background = 'skyblue';
+      l.style.background = "white";
+    }
+
+
+  </script>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

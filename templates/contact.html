@@ -1,0 +1,47 @@
+{% extends "home.html" %}
+
+{% block body %}
+<link rel="stylesheet" href="{% static 'css/contact.css' %}">
+
+<div class="contact-content">
+  
+  <h1 style="margin-top: 100px; margin-bottom: 100px;">GET IN TOUCH</h1>
+  <div class="row">
+    <div class="info col-xl-4">
+      <div class="items">
+        <span><i class="fas fa-phone"></i> 987456321, 071-548621</span>
+      </div>
+      <div class="items">
+        <span><i class="fas fa-envelope"></i> kingspider224@gmail.com</span>
+      </div>
+      <div class="items">
+        <span><i class="fas fa-map-marker"></i> Nepal,Lumbini-Butwal</span>
+      </div>
+    </div>
+
+    <div class="form col-lg-7">
+      <h2>Contact Us</h2>
+      <form action="{% url 'managecontact' %}" method="POST" class="contact-form" autocomplete="off"> {% csrf_token %}
+        <input type="text" class="form-control" name="username" placeholder="USERNAME">
+        <input type="email" class="form-control" name="email" id="exampleFormControlInput1"
+          placeholder="username@gmail.com">
+        <textarea name="contactmessage" cols="30" rows="10" placeholder="Write Your Message Here..."></textarea>
+
+        <button type="submit" class="btn btn-primary">SEND</button>
+
+      </form>
+
+
+    </div>
+  </div> 
+
+
+  <div class="map">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1766.4665794661987!2d83.47035551460412!3d27.688460683248614!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399686858d5fbe87%3A0xdcd73f03d722ac9c!2sSukkhanagar%2C%20Butwal%2032907!5e0!3m2!1sen!2snp!4v1589876580457!5m2!1sen!2snp"
+      width="100%" height="600px" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false"
+      tabindex="0"></iframe>
+  </div>
+
+
+{% endblock body %}

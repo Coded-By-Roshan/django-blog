@@ -1,0 +1,75 @@
+{% extends "home.html" %}
+{% load humanize %}
+
+{% block body %}
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v7.0"></script>
+<link rel="stylesheet" href="{% static 'blogdetail/home.css' %}">
+{% for blog in blogs  %}
+<div class="container">
+    <div class="title">
+        <h1>{{blog.title}}</h1>
+    
+        <div class="fb-share-button" data-href="http://127.0.0.1:8000/details/blog.pk" data-layout="button_count" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8000%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+        <div class="manage">
+            <h6><i class="fas fa-eye m-2"> {{blog.views}} </i></h6>
+            
+            {% if request.user.id == blog.user.id %}
+            <div class="edit">
+                <form action="{% url 'edit' blog.id %}" method="POST"> {% csrf_token %}
+                    <button type="submit"><i class="far fa-edit m-2"></i></a></button>
+                </form>
+            </div>
+            <div class="delete">
+                <form action="{% url 'delete' %}" method="POST"> {% csrf_token %}
+                    <input type="hidden" name="delete-id" value="{{ blog.id }}">
+                    <button type="submit"><i class="far fa-trash-alt m-2"></i></a></button>
+                </form>
+            </div>
+            
+            {% else %}
+            {% endif %}     
+
+        </div>
+        
+
+    </div>
+    <div class="image">
+        <img src="/media/{{blog.image}}">
+    </div>
+    <div class="para">
+        <p class="lead">{{blog.description | safe}}</p>
+    </div>
+    <div class="comments">
+        <h2 style="align-items: center; text-align: center;"> Comments </h2>
+        {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'comment' %}"> {% csrf_token %}
+            <div class="form-group">
+                <label for="exampleInputEmail1"></label>
+                <input type="text" class="form-control" name="cmt" placeholder="Post A Comment">
+                <button type="submit" class="btn btn-primary my-3">Post</button>
+                <input type="hidden" name="post" class="form-control" value="{{blog.id}}">
+            </div>
+        </form>
+
+        {% else %}
+
+        <h4>Login To Post a Comments </h4>
+
+        {% endif %}
+
+        {% for comment in comments %}
+        <div class="media">
+            <img src="https://www.pngitem.com/pimgs/m/78-786293_1240-x-1240-0-avatar-profile-icon-png.png"
+                style="height: 50px; width: 50px;" class="mr-3">
+            <div class="media-body">
+                <h5 class="mt-0">{{ comment.user.username|upper}}<span
+                        class="badge badge-secondary mx-1">{{comment.timestamp|naturaltime}}</span></h5>
+                {{comment.comment}}
+            </div>
+        </div>
+        <hr class="featurette-divider">{% endfor %}
+    </div>
+</div>
+</div>
+{% endfor %}
+{% endblock body %}

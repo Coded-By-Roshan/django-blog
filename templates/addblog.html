@@ -1,0 +1,17 @@
+{% extends "home.html" %}
+{% load crispy_forms_tags %}
+{% block body %}
+<link rel="stylesheet" href="{% static 'css/addblog.css' %}">
+<div class="container">
+    <h1>Add Your Post with correct information</h1>
+    <form action="{% url 'add' %}" method="POST" autocomplete="off" enctype="multipart/form-data">  {% csrf_token %}
+        {{ form|crispy }}
+        
+        {{ form.media }}
+        
+        <button class="btn btn-primary">ADD POST</button>
+    </form>
+</div>
+
+
+{% endblock body %}
