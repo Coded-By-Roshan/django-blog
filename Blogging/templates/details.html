@@ -1,0 +1,124 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/details.css' %}"> {% endblock %}
+
+
+{% block top %}
+{% endblock top %}
+{% block contents %}
+<style>
+    .manage {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        line-height: 20px;
+    }
+
+    .fas {
+        margin: 5px 20px;
+    }
+
+    button.subs-btn {
+        border: 1px solid black;
+        padding: 5px;
+        color: white;
+        background: black;
+        /* border: none; */
+        border-radius: 9px;
+        outline: none;
+        cursor: pointer;
+    }
+
+    input.subs-area {
+        padding: 5px;
+    }
+    .subs-form{
+        margin: 25px 0;
+    }
+</style>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+<div class="container">
+
+    {% for blog in blogs %}
+    <div class="blogs">
+        <div class="blog-details">
+            <h1 class="blog-title">{{blog.title}}.</h1>
+            {% if request.user.id == blog.user.id %}
+            <div class="manage">
+                <!-- <a href="" class="fas fa-trash"></a>
+                <a href="" class="fas fa-pen"></a> -->
+                <div class="edit">
+                    <form action="{% url 'edit' blog.id %}" method="POST"> {% csrf_token %}
+                        <button type="submit"><i class="far fa-edit m-2"></i></a></button>
+                    </form>
+                </div>
+                <div class="delete">
+                    <form action="{% url 'delete' %}" method="POST"> {% csrf_token %}
+                        <input type="hidden" name="delete-id" value="{{ blog.id }}">
+                        <button type="submit"><i class="far fa-trash-alt m-2"></i></a></button>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            {% endif %}
+            <img class="blog-title" src="{{blog.image.url}}" alt="">
+            <p>{{blog.description | safe}}.</p>
+        </div>
+
+        <div class="comment">
+            <h1>Comments</h1>
+            {% if user.is_authenticated %}
+            <form action="{% url 'comment' %}" method="POST"> {% csrf_token %}
+                <input type="text" class="comment-box" name="cmt" placeholder="Post a Comment">
+                <input type="hidden" value="{{blog.pk}}" name="hidden">
+                <button type="submit" class="btn">Post</button>
+            </form>
+            {% endif %}
+
+            {% for comment in comments %}
+            <div class="comments">
+
+                <div class="text">
+                    <h3 class="name">{{ comment.user.username|upper}}. </h3>
+                    <p class="commentText"> {{comment.comment}}.</p>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="subscribe">
+                <h2>Follow Our Website</h2>
+                <form action="{% url 'subscribe' %}" method="POST" subs-form"> {% csrf_token %}
+                    <input type="text" placeholder="yourname@gmail.com" class="subs-area" name="subscribe">
+                    <input type="hidden" value="{{blog.pk}}" name="hiddens">
+                    <button type="submit" class="subs-btn">Subscribe</button>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+    <div class="suggestions">
+        <h1>Similar Posts.</h1><br>
+        {% for suggestion in suggestions %}
+        <div class="suggest">
+            <img class="suggPic" src="{{suggestion.image.url}}">
+            <a href="{% url 'detail' suggestion.pk %}">
+                <h3>{{suggestion.title}}</h3>
+            </a>
+
+        </div>
+        {% endfor %}
+
+
+    </div>
+</div>
+{% endblock contents %}
+
+{% block timejs %}
+
+{% endblock timejs %}
+
+
+</html>

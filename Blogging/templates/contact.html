@@ -1,0 +1,96 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block css %} <link rel="stylesheet" href="{% static 'css/nav.css' %}"> {% endblock %}
+
+{% block top %}
+{% endblock top %}
+
+{% block contents %}
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+section{
+  
+    background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+    background-attachment: fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center; 
+}
+h1{
+    color: black;
+    margin: 20px 0;
+    font-size: 32px;
+    font-family: monospace;
+}
+.inner-width{
+    width: 50%;
+    border: 10px solid #7F3FBF;
+    display: block;
+    margin: auto;
+    background: #a1c4fd;
+    height: 700px;
+    text-align: center;
+    align-items: center;
+}
+form{
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    
+}
+.contact{
+ padding: 20px;
+ margin: 20px;
+ border: none;
+    border-bottom: 2px solid #7F3FBF;
+    outline: none;
+    background: none;
+    font-size: 20px;
+}
+.btn{
+    padding: 10px 20px;
+    font-size: 20px;
+    width: fit-content;
+    align-items: center;
+    text-align: center;
+    background: none;
+    outline: none;
+    border: none;
+    border: 2px solid #7F3FBF;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+}
+@media only screen and (max-width:700px){
+    .inner-width{
+        width: 100%;
+    }
+}
+</style>
+<section>
+    
+    <div class="inner-width">
+        <h1>CONTACT US</h1>
+        <p>Please Fill the form with correct information so that we can contact you.</p>
+        <form action="{% url 'managecontact' %}" method="POST" autocomplete="off"> {% csrf_token %}
+            <input type="text" class="contact" name="username" placeholder="Your Name">
+            <input type="email" class="contact" name="email" placeholder="Your Email">
+            <textarea name="contactmessage"  placeholder="Your Message" class="contact"></textarea>
+            <button type="submit" class="btn">Send &#8594</button>
+        </form>
+    </div>
+</section>
+
+{% endblock contents %}
+
+
+{% block timejs %}
+{% endblock timejs %}

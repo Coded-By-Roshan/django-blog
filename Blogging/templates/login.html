@@ -1,0 +1,70 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block css %} <link rel="stylesheet" href="{% static 'css/nav.css' %}"> {% endblock %}
+
+{% block top %}
+{% endblock top %}
+
+{% block contents %}
+<style>
+    body{
+        overflow: hidden;
+    }
+    section{
+        width: 100%;
+        height: 100vh;
+        background-color: #a1c4fd;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        align-items: center;
+    }
+    .lgn{
+        margin: 10px;
+    font-size: 17px;
+    border: 2px solid black;
+    padding: 10px;
+    outline: none;
+    border-radius: 10px;
+    }
+    .inner-width{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .login-form{
+   
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    button.lgn{
+        cursor: pointer;
+        width: 100px;
+        background-color: #c2e9fb;
+    }
+    button.lgn:hover{
+        background-color: #a1c4fd;
+    }
+</style>
+<section>
+    <div class="inner-width">
+        <h1>Login Here!</h1>
+        <form action="{% url 'login' %}" method="POST" class="login-form"> {% csrf_token %}
+            <input type="text" class="lgn" name="login-email" placeholder="Username" required>
+            <input type="password" class="lgn" name="login-pswd" placeholder="Password" required>
+            <button type="submit" class="lgn">Login</button>
+        </form>
+</div>
+    
+</section>
+
+
+{% endblock contents %}
+{% block timejs %}
+
+{% endblock timejs %}

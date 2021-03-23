@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+   {% block css %} <link rel="stylesheet" href="{% static 'css/home.css' %}"> {% endblock %}
+   
+   {% if title %}
+   <title>KnowledgeYard-{{title}}</title>
+   {% else %}
+   <title>Knowledge Yard</title>
+   {% endif %}
+   
+</head>
+
+<body>
+    {% block top %}
+    <div class="top" id="top">
+        <div class="time">
+
+        </div>
+        <div class="search-bar">
+            <form action="{%url 'search' %}" method="POST" autocomplete="off"> {% csrf_token %}
+            <input type="search" name="query" class="search " placeholder="Search The Web">
+            <button type="submit" class="src-btn"><i class="fas fa-search"
+                style="cursor: pointer; background: white; padding: 15px; border-radius: 20px; font-size: 20px; color: blueviolet;"></i></button>
+            </form>
+        </div>
+    </div>
+    {% endblock top %}
+
+    <div class="section">
+        {% block nav %}
+        <nav class="navbar active">
+            <div class="humb">
+                <span class="span"></span>
+                <span class="span"></span>
+                <span class="span"></span>
+            </div>
+            <div class="logo">
+                <a href=""><img src="http://pngimg.com/uploads/eagle/eagle_PNG1208.png" class="logoImg"></a>
+            </div>
+            <div class="menus">
+                <ul>
+                    <li class="li"><a href="{% url 'home' %}">Home</a></li>
+                    
+                    <li class="li"><a href="{% url 'contact' %}">Contact Us</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'addBlog' %}">AddPost</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                    <li class="li"><a href="{% url 'signUp' %}">SignUp</a></li>
+                    <li class="li"><a href="{% url 'login_page' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+        {% endblock nav %}
+        {% block contents %}
+        <div class="contents">
+            {% for blog in blogs %}
+            <div class="cards">
+                <div class="img">
+                    <img src="{{blog.image.url}}" alt="">
+                </div>
+                <div class="content">
+                    <h1>{{blog.title}}.</h1><br>
+                    <p>{{blog.description | safe}}.</p><br>
+                    <a href="{% url 'detail' blog.pk %}"><button class="btn">Read More</button></a>
+                </div>
+
+            </div>
+            {% endfor %}
+           
+
+        </div>
+        <div class="gotoTop">
+            <a href="#top" class="fas fa-arrow-up arrow "></a>
+        </div>
+        {% endblock contents %}
+    </div>
+    {% block timejs %}
+    <script>
+
+
+        setInterval(
+            function getTime() {
+                var today = new Date();
+
+                var hour = today.getHours()
+                var minutes = today.getMinutes()
+                var sec = today.getSeconds()
+
+                document.querySelector('.time').innerText = (hour + ":" + minutes + ":" + sec)
+
+            }
+            , 1000);
+
+
+
+
+
+    </script>
+    {% endblock timejs %}
+    {% for message in messages %}
+    <script>
+        alert('{{message}}')
+    </script>
+    {% endfor %}
+    <script>
+        var humb = document.querySelector('.humb')
+        var menus = document.querySelector(".menus")
+        var navbar = document.querySelector(".navbar")
+        var span = document.querySelectorAll(".span")
+        var topbtn = document.querySelector(".gotoTop")
+        humb.addEventListener("click", () => {
+            menus.classList.toggle("show")
+            navbar.classList.toggle("active")
+            humb.classList.toggle("bend")
+
+
+        })
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 20) {
+                topbtn.style.display = "block"
+            }
+            else {
+                topbtn.style.display = "none"
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
